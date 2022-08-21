@@ -1,3 +1,4 @@
+const { hash } = require("bcryptjs")
 const User = require("../models/user")
 
 module.exports = {
@@ -12,7 +13,7 @@ module.exports = {
     async one(req, res) {
         try {
             const id = req.param.id
-            const user = await User.findOne({ where: id })
+            const user = await User.findOne({ where: { id } })
 
             if (!user) {
                 return res.status(400).json("User not found!")
@@ -25,7 +26,15 @@ module.exports = {
     ,
     async create(req, res) {
         try {
-            await User.create(req.body)
+            const dados = req.body
+            const email = dados.email
+            const userExist = await User.findOne({ where: { email } })
+            dados.passowrd = await hash(dados.password, 8);
+            if (userExist) {
+                return res.status(400).json("User alredy exist")
+            }
+
+            await User.create(dados)
             res.status(200).json("user registered successfully!")
         } catch (error) {
             res.status(400).send(error)
@@ -33,17 +42,18 @@ module.exports = {
     },
     async update(req, res) {
         try {
-            const { name, userKey } = req.body
+            const { name, email, password } = req.body
             const id = req.param.id
 
-            const user = await User.findOne({ where:{ id }})
+            const user = await User.findOne({ where: { id } })
 
             if (!user) {
                 return res.status(400).json("User not found!")
             }
 
             user.name = name
-            user.userKey = userKey
+            user.email = email
+            user.password = password
 
             await user.save()
             res.status(201).json("User updated!")
@@ -60,7 +70,7 @@ module.exports = {
                 return res.status(400).json("User not found!")
             }
             res.status(201).json("User removed!")
-            
+
         } catch (error) {
             res.status(400).send(error)
         }

@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize")
 const database = require("../configs/db")
+const User = require("./user")
 
-const Acomodation = database.define("alocation", {
+const Acomodation = database.define("acomodation", {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -28,6 +29,10 @@ const Acomodation = database.define("alocation", {
         type: Sequelize.STRING,
         alowNull: false
     },
+    localization: {
+        type: Sequelize.STRING,
+        alowNull: false
+    },
     image: {
         type: Sequelize.STRING,
         allowNull: false
@@ -36,6 +41,11 @@ const Acomodation = database.define("alocation", {
         type:Sequelize.NUMBER,
         alowNull:false
     }
+})
+
+Acomodation.belongsTo(User,{
+    constraint: true,
+    foreignKey:"ownerId"
 })
 
 module.exports = Acomodation  

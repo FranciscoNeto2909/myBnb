@@ -1,5 +1,4 @@
 const Acomodation = require("../models/acomodation")
-
 module.exports = {
     async all(req, res) {
         try {
