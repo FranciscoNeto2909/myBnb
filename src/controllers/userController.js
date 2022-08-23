@@ -51,7 +51,7 @@ module.exports = {
     async update(req, res) {
         try {
             const { name, email, password } = req.body
-            const id = req.param.id
+            const id = req.params.id
 
             const user = await User.findOne({ where: { id } })
 
@@ -90,9 +90,9 @@ module.exports = {
     },
     async delete(req, res) {
         try {
-            const id = req.param.id
+            const id = req.params.id
             const user = await User.destroy({ where: { id } })
-
+            console.log(user)
             if (!user) {
                 return res.status(400).json("Erro: user not found!")
             }
