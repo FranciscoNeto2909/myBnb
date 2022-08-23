@@ -13,7 +13,7 @@ module.exports = {
     async one(req, res) {
         try {
             const id = req.param.id
-            const user = await User.findOne({ where: id })
+            const user = await User.findOne({ where: {id} })
 
             if (!user) {
                 return res.status(400).json("Erro: user not found!")

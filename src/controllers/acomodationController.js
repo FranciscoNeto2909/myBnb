@@ -1,3 +1,4 @@
+const { hash, compare } = require("bcryptjs")
 const Acomodation = require("../models/acomodation")
 module.exports = {
     async all(req, res) {
@@ -10,9 +11,8 @@ module.exports = {
     },
     async one(req, res) {
         try {
-            const id = req.param.id
-            const acomodation = await Acomodation.findOne({ where: id })
-
+            const id = req.params.id
+            const acomodation = await Acomodation.findOne({ where: {id} })
             if (!acomodation) {
                 return res.status(400).json("Acomodation not found!")
             }
@@ -24,33 +24,37 @@ module.exports = {
     ,
     async create(req, res) {
         try {
-            await Acomodation.create(req.body)
-            res.status(200).json("Acomodation registered successfully!")
+            const data = req.body
+            const { localization } = data
+            const acomodation = await Acomodation.findOne({ where: { localization } })
+
+            if (acomodation) {
+                return res.status(400).json("Erro: acomodations alredy exist!")
+            }
+            await Acomodation.create(data)
+            res.status(201).json("Acomodation registered successfully!")
         } catch (error) {
             res.status(400).send(error)
         }
     },
     async update(req, res) {
         try {
-            const { name, price, description, shifts, place,image,likes } = req.body
-            const id = req.param.id
+            const { name, price, description, shifts, place, image, likes } = req.body
+            const id = req.params.id
 
-            const acomodation = await Acomodation.findOne({ where:{ id }})
-
+            const acomodation = await Acomodation.findOne({ where: { id } })
             if (!acomodation) {
                 return res.status(400).json("Acomodation not found!")
             }
-
-            acomodation.name = name
-            acomodation.price = price
-            acomodation.description = description
-            acomodation.shifts = shifts
-            acomodation.place = place
-            acomodation.image = image
-            acomodation.likes = likes
-
-
-            await Acomodation.save()
+            if (name !== undefined) acomodation.name = name
+            if (price !== undefined) acomodation.price = price
+            if (description !== undefined) acomodation.description = description
+            if (shifts !== undefined) acomodation.shifts = shifts
+            if (place !== undefined) acomodation.place = place
+            if (image !== undefined) acomodation.image = image
+            if (likes !== undefined) acomodation.likes = likes
+ 
+            await acomodation.save()
             res.status(201).json("Acomodation updated!")
         } catch (error) {
             res.status(400).send(error)
@@ -58,14 +62,14 @@ module.exports = {
     },
     async delete(req, res) {
         try {
-            const id = req.param.id
+            const id = req.params.id
             const acomodation = await Acomodation.destroy({ where: { id } })
 
             if (!acomodation) {
                 return res.status(400).json("Acomodation not found!")
             }
             res.status(201).json("Acomodation removed!")
-            
+
         } catch (error) {
             res.status(400).send(error)
         }
