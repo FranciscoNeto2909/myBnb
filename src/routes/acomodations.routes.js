@@ -11,5 +11,4 @@ router
 .get(AcomodationController.one)
 .put(AcomodationController.update)
 .delete(AcomodationController.delete)
-
 module.exports = router
