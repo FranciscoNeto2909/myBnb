@@ -81,7 +81,7 @@ module.exports = {
             return res.status(400).json("Erro:incorrect email or password!")
         }
         const token = jwt.sign({ id: user.id }, "a92nfj40d92ny645lf2s03md9n2g", {
-            expiresIn: "1d"
+            expiresIn: 600
         })
         return res.status(200).json({
             msg: "User login successfully!",
