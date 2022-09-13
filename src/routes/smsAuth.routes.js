@@ -1,5 +1,8 @@
 const express = require("express")
-import authSms from "../middlewares/authSms"
+const authSms = require("../middlewares/authSms")
 const router = express.Router()
 
-router.route("/", authSms.authSms)
+router.route("/")
+.post(authSms.authSms)
+
+module.exports = router
