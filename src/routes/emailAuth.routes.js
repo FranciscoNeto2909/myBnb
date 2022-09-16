@@ -1,8 +1,8 @@
 const express = require("express")
-const authSms = require("../middlewares/authSms")
+const { authEmail } = require("../middlewares/authEmail")
 const router = express.Router()
 
 router.route("/")
-.post(authSms.authSms)
+.post(authEmail)
 
 module.exports = router
