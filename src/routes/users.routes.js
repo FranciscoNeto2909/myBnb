@@ -12,7 +12,7 @@ router
 .get(isAdmin,userController.logedUsers)
 router
 .route("/:id")
-.get(userController.one)
+.get(isAdmin,userController.one)
 .put(userController.update)
 .delete(userController.delete)
 router

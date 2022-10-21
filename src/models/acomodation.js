@@ -9,7 +9,23 @@ const Acomodation = database.define("acomodation", {
         allowNull: false,
         primaryKey: true
     },
-    name: {
+    hostSpace: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+    },
+    hostSpaceDesc: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+    },
+    hostPlace: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+    },
+    hostLocalization: {
+        type: Sequelize.STRING,
+        alowNull: false
+    },
+    title: {
         type: Sequelize.STRING(50),
         allowNull: false,
     },
@@ -17,30 +33,46 @@ const Acomodation = database.define("acomodation", {
         type: Sequelize.STRING,
         allowNull: false
     },
-    description: {
-        type: Sequelize.STRING,
-        allowNull: false
+    hostsQuant: {
+        type: Sequelize.NUMBER,
+        allowNull: false,
     },
-    shifts: {
-        type: Sequelize.STRING,
-        allowNull: false
+    bedsQuant: {
+        type: Sequelize.NUMBER,
+        allowNull: false,
     },
-    place: {
+    bedroomsQuant: {
+        type: Sequelize.NUMBER,
+        allowNull: false,
+    },
+    bethroomsQuant: {
+        type: Sequelize.NUMBER,
+        allowNull: false,
+    },
+    confort: {
+        type: Sequelize.ARRAY,
+        allowNull: false,
+    },
+    preferences: {
+        type: Sequelize.ARRAY,
+        allowNull: false,
+    },
+    securityItems: {
+        type: Sequelize.ARRAY,
+        allowNull: false,
+    },
+    hostEmphasis: {
         type: Sequelize.STRING,
         alowNull: false
     },
-    localization: {
+    hostDesc: {
         type: Sequelize.STRING,
         alowNull: false
     },
-    image: {
-        type: Sequelize.STRING,
-        allowNull: false
+    hostOptions: {
+        type: Sequelize.ARRAY,
+        allowNull: false,
     },
-    likes:{
-        type:Sequelize.NUMBER,
-        alowNull:false
-    }
 })
 
 Acomodation.belongsTo(User,{

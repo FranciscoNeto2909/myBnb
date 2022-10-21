@@ -34,7 +34,7 @@ module.exports = {
             await Acomodation.create(data)
             res.status(201).json("Acomodation registered successfully!")
         } catch (error) {
-            res.status(400).send(error)
+            res.status(400).send("faltam dados")
         }
     },
     async update(req, res) {
