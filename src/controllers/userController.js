@@ -38,6 +38,7 @@ module.exports = {
             const dados = req.body
             const email = req.body.email
             const userExist = await User.findOne({ where: { email } })
+            
             if (userExist) {
                 return res.status(400).json("Erro: user alredy existe, please choice another email!")
             }

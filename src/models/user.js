@@ -17,6 +17,24 @@ const User = database.define("user",{
             }
         }
     },
+    lastName: {
+        type: Sequelize.STRING(50),
+        allowNull:false,
+        validate:{
+            notEmpty:{
+                msg:"Esse campo não pode ser vazio"
+            }
+        }
+    },
+    phone:{
+        type:Sequelize.STRING(15),
+        allowNull:false,
+        validate:{
+            notEmpty:{
+                msg:"Esse campo não pode ser vazio"
+            }
+        }
+    },
     email: {
         type: Sequelize.STRING(30),
         allowNull:false,
@@ -27,8 +45,17 @@ const User = database.define("user",{
         }
     },
     password:{
-        type: Sequelize.STRING(8),
+        type: Sequelize.STRING(),
         allowNull:false,
+        validate:{
+            notEmpty:{
+                msg:"Esse campo não pode ser vazio"
+            }
+        }
+    },
+    birthDate:{
+        type:Sequelize.STRING(10),
+        allowNull: false,
         validate:{
             notEmpty:{
                 msg:"Esse campo não pode ser vazio"
