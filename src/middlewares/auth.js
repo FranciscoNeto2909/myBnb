@@ -3,7 +3,7 @@ const { promisify } = require("util")
 
 module.exports = {
     isLogged: async (req, res, next) => {
-        const authHeader = req.headers.authorization;
+        const authHeader = await req.headers.authorization;
         const [,token] = authHeader.split(" ")
 
         if (!authHeader || !token) {

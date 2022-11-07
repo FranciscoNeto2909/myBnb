@@ -13,9 +13,8 @@ module.exports = {
 
     async one(req, res) {
         try {
-            const email = req.param.id
-            const user = await User.findOne({ where: { email } })
-
+            const id = req.params.id
+            const user = await User.findOne({ where: { id } })
             if (!user) {
                 return res.status(400).json("Erro: user not found!")
             }
@@ -41,7 +40,7 @@ module.exports = {
             const dados = req.body
             const email = req.body.email
             const userExist = await User.findOne({ where: { email } })
-            console.log(req.body)
+
             if (userExist) {
                 return res.status(400).json("Erro: user alredy existe, please choice another email!")
             }
@@ -106,7 +105,7 @@ module.exports = {
                 error:false,
                 msg: "User login successfully!",
                 token: token,
-                user: user
+                userId: user.id
             })
         }
     },
@@ -114,7 +113,7 @@ module.exports = {
         try {
             const id = req.params.id
             const user = await User.destroy({ where: { id } })
-            console.log(user)
+
             if (!user) {
                 return res.status(400).json("Erro: user not found!")
             }
