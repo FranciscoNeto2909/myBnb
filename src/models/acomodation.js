@@ -50,15 +50,15 @@ const Acomodation = database.define("acomodation", {
         allowNull: false,
     },
     confort: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     preferences: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     securityItems: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     hostEmphasis: {
@@ -70,7 +70,7 @@ const Acomodation = database.define("acomodation", {
         alowNull: false
     },
     hostOptions: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.STRING,
         allowNull: false,
     },
 })

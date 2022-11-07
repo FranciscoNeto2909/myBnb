@@ -1,6 +1,6 @@
 const express = require("express")
 const userController = require("../controllers/userController")
-const { isAdmin } = require("../middlewares/auth")
+const { isLogged } = require("../middlewares/auth")
 const router = express.Router()
 
 router
@@ -8,11 +8,8 @@ router
 .get(userController.all)
 .post(userController.create)
 router
-.route("/admin")
-.get(isAdmin,userController.logedUsers)
-router
 .route("/:id")
-.get(isAdmin,userController.one)
+.get(isLogged,userController.one)
 .put(userController.update)
 .delete(userController.delete)
 router

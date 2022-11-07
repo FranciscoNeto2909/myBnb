@@ -1,4 +1,4 @@
-const { hash, compare } = require("bcryptjs")
+const { compare } = require("bcryptjs")
 const User = require("../models/user")
 const jwt = require("jsonwebtoken")
 module.exports = {
@@ -10,10 +10,11 @@ module.exports = {
             res.status(400).send(error)
         }
     },
+
     async one(req, res) {
         try {
-            const id = req.param.id
-            const user = await User.findOne({ where: {id} })
+            const email = req.param.id
+            const user = await User.findOne({ where: { email } })
 
             if (!user) {
                 return res.status(400).json("Erro: user not found!")
@@ -23,6 +24,7 @@ module.exports = {
             res.status(400).send(error)
         }
     },
+
     async logedUsers(req, res) {
         try {
             return res.status(200).json({
@@ -33,25 +35,27 @@ module.exports = {
             return res.status(400).send(error)
         }
     },
+
     async create(req, res) {
         try {
             const dados = req.body
             const email = req.body.email
             const userExist = await User.findOne({ where: { email } })
-            
+            console.log(req.body)
             if (userExist) {
                 return res.status(400).json("Erro: user alredy existe, please choice another email!")
             }
-            dados.password = await hash(dados.password, 8)
+
             await User.create(dados)
             return res.status(200).json("Registered user successfully!")
         } catch (error) {
             return res.status(400).send(error)
         }
     },
+
     async update(req, res) {
         try {
-            const { name, email, password } = req.body
+            const { name, email, password, phone, birthdate, sex, address } = req.body
             const id = req.params.id
 
             const user = await User.findOne({ where: { id } })
@@ -63,31 +67,48 @@ module.exports = {
             user.name = name
             user.email = email
             user.password = password
-
+            user.phone = phone
+            user.birthDate = birthdate
+            user.sex = sex
+            user.address = address
             await user.save()
+
             res.status(201).json("User updated!")
         } catch (error) {
             res.status(400).send(error)
         }
     },
+
     async login(req, res) {
+
         const { email, password } = req.body
 
-        const user = await User.findOne({ attributes:["id","email", "password"],where: { email } })
+        const user = await User.findOne({ where: { email } })
 
         if (user === null) {
-            return res.status(400).json("Erro:incorrect email or password!")
+            return res.status(400).json({
+                error: true,
+                msg: "Incorrect email or password!"
+            })
         }
         if (!(await compare(password, user.password))) {
-            return res.status(400).json("Erro:incorrect email or password!")
+            return res.status(400).json({
+                error: true,
+                msg: "Incorrect email or password!"
+            })
+        } else {
+
+            const token = jwt.sign({ id: user.id }, "a92nfj40d92ny645lf2s03md9n2g", {
+                expiresIn: '7d'
+            })
+
+            return res.status(200).json({
+                error:false,
+                msg: "User login successfully!",
+                token: token,
+                user: user
+            })
         }
-        const token = jwt.sign({ id: user.id }, "a92nfj40d92ny645lf2s03md9n2g", {
-            expiresIn: 600
-        })
-        return res.status(200).json({
-            msg: "User login successfully!",
-            token:token
-        })
     },
     async delete(req, res) {
         try {

@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken")
 const { promisify } = require("util")
 
 module.exports = {
-    isAdmin: async (req, res, next) => {
+    isLogged: async (req, res, next) => {
         const authHeader = req.headers.authorization;
         const [,token] = authHeader.split(" ")
 
@@ -14,7 +14,7 @@ module.exports = {
             req.userId = decode.id;
             return next()
         } catch (error) {
-            return res.status(400).json("Erro: token invalido")
+            return res.status(400).json("Erro:invalid token")
         }
     }
 }
