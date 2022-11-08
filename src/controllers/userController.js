@@ -54,7 +54,7 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const { name, email, password, phone, birthdate, sex, address } = req.body
+            const { name, email, phone, birthDate, sex, address } = req.body
             const id = req.params.id
 
             const user = await User.findOne({ where: { id } })
@@ -63,16 +63,17 @@ module.exports = {
                 return res.status(400).json("Erro: user not found!")
             }
 
-            user.name = name
-            user.email = email
-            user.password = password
-            user.phone = phone
-            user.birthDate = birthdate
-            user.sex = sex
-            user.address = address
+            name != " " ? user.name = name : "";
+            email != "" ? user.email = email : "";
+            phone != "" ? user.phone = phone : "" ;
+            birthDate != "" ? user.birthDate = birthDate : "" ;
+            sex != "" ? user.sex = sex : "" ;
+            address != "" ? user.address = address : "" ;
+
             await user.save()
 
             res.status(201).json("User updated!")
+
         } catch (error) {
             res.status(400).send(error)
         }
@@ -102,7 +103,7 @@ module.exports = {
             })
 
             return res.status(200).json({
-                error:false,
+                error: false,
                 msg: "User login successfully!",
                 token: token,
                 userId: user.id
