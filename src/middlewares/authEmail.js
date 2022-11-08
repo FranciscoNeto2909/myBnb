@@ -15,9 +15,7 @@ module.exports = {
     async authEmail(req, res) {
         const email = await req.body.email
         const code = await req.body.code
-        console.log(email)
-        console.log(code)
-        console.log("Enviando email...")
+
         try {
             transporter.sendMail({
                 from: "Mybnbapp <burdette.kutch68@ethereal.email>",
@@ -25,7 +23,7 @@ module.exports = {
                 subject:"Codigo:",
                 text:code,
             })
-                .then(msg => console.log(msg))
+                .then(msg => console.log("Sms sended with success!"))
                 .catch(err => console.log("erro:" + err))
             return res.status(200).json("Sms sended with success!")
         } catch (error) {

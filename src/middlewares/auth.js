@@ -4,7 +4,8 @@ const { promisify } = require("util")
 module.exports = {
     isLogged: async (req, res, next) => {
         const authHeader = await req.headers.authorization;
-        const [,token] = authHeader.split(" ")
+
+        const [,token] = await authHeader.split(" ")
 
         if (!authHeader || !token) {
             return res.status(400).json("Erro: login to access this page")
