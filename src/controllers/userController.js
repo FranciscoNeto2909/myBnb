@@ -54,7 +54,7 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const { name, email, phone, birthDate, sex, address } = req.body
+            const { name, email, phone, birthDate, sex, address, oldPassword, newPassword } = req.body
             const id = req.params.id
 
             const user = await User.findOne({ where: { id } })
@@ -63,16 +63,35 @@ module.exports = {
                 return res.status(400).json("Erro: user not found!")
             }
 
+            if (oldPassword != "" && !(await compare(oldPassword, user.password))) {
+                return res.status(400).json({
+                    error: true,
+                    msg: "Incorrect password!"
+                })
+            } else if (newPassword != "") {
+                user.password = newPassword
+                console.log(newPassword)
+                await user.save()
+
+                return res.status(201).json({
+                    msg: "Password changed with success!",
+                    error: false,
+                })
+            }
+
             name != " " ? user.name = name : "";
             email != "" ? user.email = email : "";
-            phone != "" ? user.phone = phone : "" ;
-            birthDate != "" ? user.birthDate = birthDate : "" ;
-            sex != "" ? user.sex = sex : "" ;
-            address != "" ? user.address = address : "" ;
+            phone != "" ? user.phone = phone : "";
+            birthDate != "" ? user.birthDate = birthDate : "";
+            sex != "" ? user.sex = sex : "";
+            address != "" ? user.address = address : "";
 
             await user.save()
 
-            res.status(201).json("User updated!")
+            res.status(201).json({
+                msg: "User updated!",
+                error: false
+            })
 
         } catch (error) {
             res.status(400).send(error)
