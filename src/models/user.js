@@ -18,11 +18,14 @@ const User = database.define("user",{
             }
         }
     },
+    image:{
+        type:Sequelize.STRING
+    },
     sex:{
-        type:sequelize.STRING(),
+        type:sequelize.STRING,
     },
     address:{
-        type:sequelize.STRING()
+        type:sequelize.STRING
     },
     phone:{
         type:Sequelize.STRING(15),
@@ -34,7 +37,7 @@ const User = database.define("user",{
         }
     },
     email: {
-        type: Sequelize.STRING(),
+        type: Sequelize.STRING,
         allowNull:false,
         validate:{
             notEmpty:{
@@ -43,7 +46,7 @@ const User = database.define("user",{
         }
     },
     password:{
-        type: Sequelize.STRING(),
+        type: Sequelize.STRING,
         allowNull:false,
         validate:{
             notEmpty:{

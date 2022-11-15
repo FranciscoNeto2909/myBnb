@@ -1,19 +1,14 @@
 const multer = require("multer")
-const path = require("path")
-const crpyto = require("crypto")
 
-module.exports = {
-    dest: path.resolve(__dirname, '..', 'images', 'test'),
+// const upload = multer({dest:'./src/temp'})
+
+module.exports = (multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
-            cb(null, path.resolve(__dirname, '..', 'images', 'test'))
+            cb(null, './src/images/profile')
         },
         filename: (req, file, cb) => {
-            crpyto.randomBytes(16, (err, hash) => {
-                if (err)  cb(err)
-                const fileName = `${hash.toString("hex")}-${file.originalname}`
-                cb(null, fileName)
-            })
+            cb(null,Date.now().toString() + "_" + file.originalname )
         }
-    })
-}
+    }),
+}))

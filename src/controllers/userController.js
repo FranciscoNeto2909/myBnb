@@ -1,6 +1,10 @@
 const { compare } = require("bcryptjs")
+const express = require("express")
 const User = require("../models/user")
 const jwt = require("jsonwebtoken")
+const path = require("path")
+const fs = require("fs")
+
 module.exports = {
     async all(req, res) {
         try {
@@ -15,6 +19,7 @@ module.exports = {
         try {
             const id = req.params.id
             const user = await User.findOne({ where: { id } })
+            
             if (!user) {
                 return res.status(400).json("Erro: user not found!")
             }
@@ -54,7 +59,7 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const { name, email, phone, birthDate, sex, address, oldPassword, newPassword } = req.body
+            const { name, email, phone, birthDate, sex, address, oldPassword, newPassword, image } = req.body
             const id = req.params.id
 
             const user = await User.findOne({ where: { id } })
@@ -70,7 +75,6 @@ module.exports = {
                 })
             } else if (newPassword != "") {
                 user.password = newPassword
-                console.log(newPassword)
                 await user.save()
 
                 return res.status(201).json({
@@ -80,6 +84,7 @@ module.exports = {
             }
 
             name != " " ? user.name = name : "";
+            image != "" ? user.image = image : "";
             email != "" ? user.email = email : "";
             phone != "" ? user.phone = phone : "";
             birthDate != "" ? user.birthDate = birthDate : "";
@@ -95,6 +100,46 @@ module.exports = {
 
         } catch (error) {
             res.status(400).send(error)
+        }
+    },
+
+    async updateImage(req, res){
+        try {
+            
+            const id = req.params.id
+            const user = await User.findOne({ where: { id } })
+            
+            if (!user) {
+                return res.status(400).json("Erro: user not found!")
+            }
+            if(user.image !=""){
+                try {
+                    fs.unlink(`./src/images/profile/${user.image}`,(error) => {
+                        if(error){
+                            console.log("Error:"+error.message)
+                        }
+                    })
+                } catch (error) {
+                    console.log("Error:"+error.message)
+                }
+            }
+            if (req.file) {
+                try {
+                    user.image = req.file.filename
+                    await user.save()
+                    return res.status(200).json({
+                        error:false,
+                        msg:"Uploaded with success!"
+                    })
+                } catch (error) {
+                    return res.status(400).json({
+                        error:true,
+                        msg:"Upload error!"
+                    })
+                }
+            }
+        } catch (error) {
+            return res.status(400).json(error)
         }
     },
 
