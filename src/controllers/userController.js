@@ -1,8 +1,6 @@
 const { compare } = require("bcryptjs")
-const express = require("express")
 const User = require("../models/user")
 const jwt = require("jsonwebtoken")
-const path = require("path")
 const fs = require("fs")
 
 module.exports = {
@@ -105,7 +103,6 @@ module.exports = {
 
     async updateImage(req, res){
         try {
-            
             const id = req.params.id
             const user = await User.findOne({ where: { id } })
             

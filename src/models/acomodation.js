@@ -9,6 +9,10 @@ const Acomodation = database.define("acomodation", {
         allowNull: false,
         primaryKey: true
     },
+    hostName: {
+        type: Sequelize.STRING,
+        alowNull: false
+    },
     hostSpace: {
         type: Sequelize.STRING(50),
         allowNull: false,
@@ -30,8 +34,11 @@ const Acomodation = database.define("acomodation", {
         allowNull: false,
     },
     price: {
-        type: Sequelize.STRING,
+        type: Sequelize.NUMBER,
         allowNull: false
+    },
+    images: {
+        type: Sequelize.STRING,
     },
     hostsQuant: {
         type: Sequelize.NUMBER,
@@ -73,11 +80,6 @@ const Acomodation = database.define("acomodation", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-})
-
-Acomodation.belongsTo(User,{
-    constraint: true,
-    foreignKey:"ownerId"
 })
 
 module.exports = Acomodation  

@@ -1,6 +1,7 @@
 const express = require("express")
-const multer = require("multer")
 const AcomodationController = require("../controllers/acomodationController")
+const upload = require("../configs/multerMiltiple")
+
 const router = express.Router()
 
 router
@@ -12,4 +13,7 @@ router
     .get(AcomodationController.one)
     .put(AcomodationController.update)
     .delete(AcomodationController.delete)
+router
+    .route("/images/:acomodationName")
+    .post(upload.array('images'), AcomodationController.setImages)
 module.exports = router
