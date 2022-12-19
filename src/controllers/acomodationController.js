@@ -55,7 +55,7 @@ module.exports = {
                         imagesTitles.push(img.filename)
                     })
                 }
-                
+
                 acomodation.images = imagesTitles.toString()
                 await acomodation.save()
                 return res.status(201).json({
@@ -71,26 +71,38 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const { name, price, description, shifts, place, image, likes } = req.body
             const id = req.params.id
 
             const acomodation = await Acomodation.findOne({ where: { id } })
             if (!acomodation) {
                 return res.status(400).json("Acomodation not found!")
             }
-            if (name !== undefined) acomodation.name = name
-            if (price !== undefined) acomodation.price = price
-            if (description !== undefined) acomodation.description = description
-            if (shifts !== undefined) acomodation.shifts = shifts
-            if (place !== undefined) acomodation.place = place
-            if (image !== undefined) acomodation.image = image
-            if (likes !== undefined) acomodation.likes = likes
+            else {
+                acomodation.bedroomsQuant = req.body.bedroomsQuant
+                acomodation.bedsQuant = req.body.bedsQuant
+                acomodation.bethroomsQuant = req.body.bethroomsQuant
+                acomodation.confort = req.body.confort.toString()
+                acomodation.hostDesc = req.body.hostDesc
+                acomodation.hostEmphasis = req.body.hostEmphasis
+                acomodation.hostLocalization = req.body.hostLocalization
+                acomodation.hostName = req.body.hostName
+                acomodation.hostOptions = req.body.hostOptions.toString()
+                acomodation.hostPlace = req.body.hostPlace
+                acomodation.hostSpace = req.body.hostSpace
+                acomodation.hostSpaceDesc = req.body.hostSpaceDesc
+                acomodation.hostsQuant = req.body.hostsQuant
+                acomodation.preferences = req.body.preferences.toString()
+                acomodation.price = req.body.price
+                acomodation.securityItems = req.body.securityItems.toString()
+                acomodation.title = req.body.title
 
-            await acomodation.save()
-            res.status(201).json({
-                erro: false,
-                msg: "Acomodation updated!"
-            })
+                await acomodation.save()
+
+                return res.status(201).json({
+                    erro: false,
+                    msg: "Acomodation updated!"
+                })
+            }
         } catch (error) {
             res.status(400).send(error)
         }
@@ -103,7 +115,11 @@ module.exports = {
             if (!acomodation) {
                 return res.status(400).json("Acomodation not found!")
             }
-            res.status(201).json("Acomodation removed!")
+            
+            return res.status(201).json({
+                erro: false,
+                msg: "Acomodation removed!"
+            })
 
         } catch (error) {
             res.status(400).send(error)

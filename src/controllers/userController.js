@@ -174,12 +174,21 @@ module.exports = {
     async delete(req, res) {
         try {
             const id = req.params.id
-            const user = await User.destroy({ where: { id } })
+            const user = await User.findOne({ where: { id } })
 
             if (!user) {
                 return res.status(400).json("Erro: user not found!")
+            } 
+            else {
+                fs.unlink(`./src/images/profile/${user.image}`,(error) => {
+                    if(error){
+                        console.log("Error:"+error.message)
+                    }
+                })
+
+                await user.destroy()
+                res.status(201).json("User removed!")
             }
-            res.status(201).json("User removed!")
 
         } catch (error) {
             res.status(400).send(error)
