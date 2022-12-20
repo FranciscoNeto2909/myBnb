@@ -54,14 +54,14 @@ module.exports = {
                     images.map(img => {
                         imagesTitles.push(img.filename)
                     })
+                    
+                    acomodation.images = imagesTitles.toString()
+                    await acomodation.save()
+                    return res.status(201).json({
+                        erro: false,
+                        msg: "Acomodation images saved with success!"
+                    })
                 }
-
-                acomodation.images = imagesTitles.toString()
-                await acomodation.save()
-                return res.status(201).json({
-                    erro: false,
-                    msg: "Acomodation images saved with success!"
-                })
             }
 
         } catch (error) {
