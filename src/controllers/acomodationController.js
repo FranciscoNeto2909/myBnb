@@ -1,4 +1,4 @@
-const { hash, compare } = require("bcryptjs")
+const fs = require("fs")
 const Acomodation = require("../models/acomodation")
 
 module.exports = {
@@ -54,7 +54,7 @@ module.exports = {
                     images.map(img => {
                         imagesTitles.push(img.filename)
                     })
-                    
+
                     acomodation.images = imagesTitles.toString()
                     await acomodation.save()
                     return res.status(201).json({
@@ -110,11 +110,22 @@ module.exports = {
     async delete(req, res) {
         try {
             const id = req.params.id
-            const acomodation = await Acomodation.destroy({ where: { id } })
+            const acomodation = await Acomodation.findOne({ where: { id } })
 
             if (!acomodation) {
                 return res.status(400).json("Acomodation not found!")
             }
+            
+            acomodation.images.split(",").map(image => {
+                fs.unlink(`./src/images/acomodations/${image}`, (error) => {
+                    if (error) {
+                        console.log("Error:" + error.message)
+                    }
+                })
+            })
+
+            await acomodation.destroy()
+            await acomodation.save()
             
             return res.status(201).json({
                 erro: false,
