@@ -116,13 +116,15 @@ module.exports = {
                 return res.status(400).json("Acomodation not found!")
             }
             
-            acomodation.images.split(",").map(image => {
-                fs.unlink(`./src/images/acomodations/${image}`, (error) => {
-                    if (error) {
-                        console.log("Error:" + error.message)
-                    }
+            if(acomodation.images){
+                acomodation.images.split(",").map(image => {
+                    fs.unlink(`./src/images/acomodations/${image}`, (error) => {
+                        if (error) {
+                            console.log("Error:" + error.message)
+                        }
+                    })
                 })
-            })
+            }
 
             await acomodation.destroy()
             await acomodation.save()
