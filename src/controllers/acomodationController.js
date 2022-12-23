@@ -42,19 +42,20 @@ module.exports = {
             res.status(400).json("faltam dados" + error)
         }
     },
+    
     async setImages(req, res) {
         try {
             if (req.files) {
                 const imagesTitles = []
                 const title = req.params.acomodationName
                 const images = req.files
+                
                 const acomodation = await Acomodation.findOne({ where: { title } })
 
                 if (acomodation) {
-                    images.map(img => {
+                    await images.map(img => {
                         imagesTitles.push(img.filename)
                     })
-
                     acomodation.images = imagesTitles.toString()
                     await acomodation.save()
                     return res.status(201).json({
