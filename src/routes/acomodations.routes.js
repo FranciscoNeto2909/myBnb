@@ -16,4 +16,5 @@ router
 router
     .route("/images/:acomodationName")
     .put(upload.array('images'), AcomodationController.setImages)
+    
 module.exports = router

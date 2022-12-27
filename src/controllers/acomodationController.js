@@ -45,7 +45,6 @@ module.exports = {
 
     async setImages(req, res) {
         try {
-            if (req.files) {
                 const imagesTitles = []
                 const title = req.params.acomodationName
                 const images = req.files
@@ -55,7 +54,7 @@ module.exports = {
                 if (!acomodation) {
                     return res.status(400).json({
                         erro: true,
-                        msg: "Acomodation inexistent!"
+                        msg: "Acomodation unexistent!"
                     })
                 } else {
                     await images.map(img => {
@@ -63,15 +62,13 @@ module.exports = {
                     })
                 
                     acomodation.images = imagesTitles.toString()
-                    await acomodation.save()
 
+                    await acomodation.save()
                     return res.status(201).json({
                         erro: false,
                         msg: "Acomodation images saved with success!"
                     })
                 }
-            }
-
         } catch (error) {
             return res.status(400).json(error)
         }
