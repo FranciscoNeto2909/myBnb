@@ -124,6 +124,7 @@ module.exports = {
                 try {
                     user.image = req.file.filename
                     await user.save()
+                    
                     return res.status(200).json({
                         error:false,
                         msg:"Uploaded with success!"

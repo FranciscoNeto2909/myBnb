@@ -1,6 +1,5 @@
 const cors = require("cors")
 const express = require("express")
-const multer = require("multer")
 const sequelize = require("./configs/db")
 const userRoutes = require("./routes/users.routes")
 const acomodationsRoutes = require("./routes/acomodations.routes")

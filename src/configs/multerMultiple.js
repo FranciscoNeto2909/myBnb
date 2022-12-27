@@ -1,11 +1,9 @@
 const multer = require("multer")
-const fs = require('fs');
-
+const path = require("path")
 module.exports = (multer({
     storage: multer.diskStorage({
-        destination: async (req, file, cb) => {
-            const dir = "./src/images/acomodations";
-            cb(null, dir)
+        destination: (req, file, cb) => {
+            cb(null, path.join(__dirname,  '../images/acomodations'))
         },
         filename: (req, file, cb) => {
             cb(null, Date.now().toString() + "_" + file.originalname)

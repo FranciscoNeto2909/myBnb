@@ -42,22 +42,30 @@ module.exports = {
             res.status(400).json("faltam dados" + error)
         }
     },
-    
+
     async setImages(req, res) {
         try {
             if (req.files) {
                 const imagesTitles = []
                 const title = req.params.acomodationName
                 const images = req.files
-                
+
                 const acomodation = await Acomodation.findOne({ where: { title } })
 
-                if (acomodation) {
+                if (!acomodation) {
+                    return res.status(400).json({
+                        erro: true,
+                        msg: "Acomodation inexistent!"
+                    })
+                } else {
                     await images.map(img => {
                         imagesTitles.push(img.filename)
                     })
-                    acomodation.images = imagesTitles.toString()
+                    const titles = await imagesTitles.toString()
+                    acomodation.images = titles
+                    
                     await acomodation.save()
+
                     return res.status(201).json({
                         erro: false,
                         msg: "Acomodation images saved with success!"
@@ -116,8 +124,8 @@ module.exports = {
             if (!acomodation) {
                 return res.status(400).json("Acomodation not found!")
             }
-            
-            if(acomodation.images){
+
+            if (acomodation.images) {
                 acomodation.images.split(",").map(image => {
                     fs.unlink(`./src/images/acomodations/${image}`, (error) => {
                         if (error) {
@@ -129,7 +137,7 @@ module.exports = {
 
             await acomodation.destroy()
             await acomodation.save()
-            
+
             return res.status(201).json({
                 erro: false,
                 msg: "Acomodation removed!"

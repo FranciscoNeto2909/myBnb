@@ -1,6 +1,6 @@
 const express = require("express")
 const AcomodationController = require("../controllers/acomodationController")
-const upload = require("../configs/multerMiltiple")
+const upload = require("../configs/multerMultiple")
 
 const router = express.Router()
 
