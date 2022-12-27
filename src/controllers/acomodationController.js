@@ -61,9 +61,8 @@ module.exports = {
                     await images.map(img => {
                         imagesTitles.push(img.filename)
                     })
-                    const titles = await imagesTitles.toString()
-                    acomodation.images = titles
-                    
+                
+                    acomodation.images = imagesTitles.toString()
                     await acomodation.save()
 
                     return res.status(201).json({
