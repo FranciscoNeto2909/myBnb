@@ -37,7 +37,7 @@ const Acomodation = database.define("acomodation", {
         type: Sequelize.NUMBER,
         allowNull: false
     },
-    images: {
+    image: {
         type: Sequelize.STRING,
     },
     hostsQuant: {

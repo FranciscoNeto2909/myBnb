@@ -45,30 +45,41 @@ module.exports = {
 
     async setImages(req, res) {
         try {
-                const imagesTitles = []
-                const title = req.params.acomodationName
-                const images = req.files
+            const title = req.params.acomodationName
 
-                const acomodation = await Acomodation.findOne({ where: { title } })
+            const acomodation = await Acomodation.findOne({ where: { title } })
 
-                if (!acomodation) {
-                    return res.status(400).json({
-                        erro: true,
-                        msg: "Acomodation unexistent!"
+            if (!acomodation) {
+                return res.status(400).json("Erro: Acomodation not found!")
+            }
+            if (acomodation.image != "" | acomodation.image != null) {
+                try {
+                    fs.unlink(`./src/images/acomodations/${acomodation.image}`, (error) => {
+                        if (error) {
+                            console.log("Error:" + error.message)
+                        }
                     })
-                } else {
-                    await images.map(img => {
-                        imagesTitles.push(img.filename)
-                    })
-                
-                    acomodation.images = imagesTitles.toString()
-
+                } catch (error) {
+                    console.log("Error:" + error.message)
+                }
+            }
+            if (req.file) {
+                try {
+                    acomodation.image = req.file.filename
                     await acomodation.save()
-                    return res.status(201).json({
-                        erro: false,
-                        msg: "Acomodation images saved with success!"
+
+                    return res.status(200).json({
+                        error: false,
+                        msg: "Uploaded with success!"
+                    })
+                } catch (error) {
+                    return res.status(400).json({
+                        error: true,
+                        msg: "Upload error!"
                     })
                 }
+            }
+
         } catch (error) {
             return res.status(400).json(error)
         }
@@ -121,13 +132,11 @@ module.exports = {
                 return res.status(400).json("Acomodation not found!")
             }
 
-            if (acomodation.images) {
-                acomodation.images.split(",").map(image => {
-                    fs.unlink(`./src/images/acomodations/${image}`, (error) => {
-                        if (error) {
-                            console.log("Error:" + error.message)
-                        }
-                    })
+            if (acomodation.image) {
+                fs.unlink(`./src/images/acomodations/${acomodation.image}`, (error) => {
+                    if (error) {
+                        console.log("Error:" + error.message)
+                    }
                 })
             }
 

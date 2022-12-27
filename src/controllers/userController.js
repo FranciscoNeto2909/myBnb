@@ -17,7 +17,7 @@ module.exports = {
         try {
             const id = req.params.id
             const user = await User.findOne({ where: { id } })
-            
+
             if (!user) {
                 return res.status(400).json("Erro: user not found!")
             }
@@ -101,38 +101,38 @@ module.exports = {
         }
     },
 
-    async updateImage(req, res){
+    async updateImage(req, res) {
         try {
             const id = req.params.id
             const user = await User.findOne({ where: { id } })
-            
+
             if (!user) {
                 return res.status(400).json("Erro: user not found!")
             }
-            if(user.image !=""){
+            if (user.image != "") {
                 try {
-                    fs.unlink(`./src/images/profile/${user.image}`,(error) => {
-                        if(error){
-                            console.log("Error:"+error.message)
+                    fs.unlink(`./src/images/profile/${user.image}`, (error) => {
+                        if (error) {
+                            console.log("Error:" + error.message)
                         }
                     })
                 } catch (error) {
-                    console.log("Error:"+error.message)
+                    console.log("Error:" + error.message)
                 }
             }
             if (req.file) {
                 try {
                     user.image = req.file.filename
                     await user.save()
-                    
+
                     return res.status(200).json({
-                        error:false,
-                        msg:"Uploaded with success!"
+                        error: false,
+                        msg: "Uploaded with success!"
                     })
                 } catch (error) {
                     return res.status(400).json({
-                        error:true,
-                        msg:"Upload error!"
+                        error: true,
+                        msg: "Upload error!"
                     })
                 }
             }
@@ -179,13 +179,15 @@ module.exports = {
 
             if (!user) {
                 return res.status(400).json("Erro: user not found!")
-            } 
+            }
             else {
-                fs.unlink(`./src/images/profile/${user.image}`,(error) => {
-                    if(error){
-                        console.log("Error:"+error.message)
-                    }
-                })
+                if (user.image) {
+                    fs.unlink(`./src/images/profile/${user.image}`, (error) => {
+                        if (error) {
+                            console.log("Error:" + error.message)
+                        }
+                    })
+                }
 
                 await user.destroy()
                 res.status(201).json("User removed!")
