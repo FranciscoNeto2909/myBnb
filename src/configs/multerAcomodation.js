@@ -6,7 +6,7 @@ module.exports = (multer({
             cb(null, './src/images/acomodations')
         },
         filename: (req, file, cb) => {
-            cb(null, Date.now().toString() + "_" + file.originalname)
+            cb(null,Date.now().toString() + "_" + file.originalname )
         }
     }),
 }))

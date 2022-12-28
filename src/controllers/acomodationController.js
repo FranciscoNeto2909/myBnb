@@ -51,17 +51,6 @@ module.exports = {
             if (!acomodation) {
                 return res.status(400).json("Erro: Acomodation not found!")
             }
-            if (typeof acomodation.image == 'string' && acomodation.image.length < 5) {
-                try {
-                    fs.unlink(`./src/images/acomodations/${acomodation.image}`, (error) => {
-                        if (error) {
-                            console.log("Error:" + error.message)
-                        }
-                    })
-                } catch (error) {
-                    console.log("Error:" + error.message)
-                }
-            }
             else if (req.file) {
                 try {
                     acomodation.image = await req.file.filename
@@ -69,12 +58,14 @@ module.exports = {
 
                     return res.status(200).json({
                         error: false,
-                        msg: "Image uploaded with success!"
+                        msg: "Image uploaded with success!",
+                        image: req.file.filename
                     })
                 } catch (error) {
                     return res.status(400).json({
                         error: true,
-                        msg: "Upload error!"
+                        msg: "Upload error!",
+                        image: req.file.filename
                     })
                 }
             }
