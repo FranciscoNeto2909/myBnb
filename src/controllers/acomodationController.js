@@ -58,14 +58,12 @@ module.exports = {
 
                     return res.status(200).json({
                         error: false,
-                        msg: "Image uploaded with success!",
-                        image: req.file.filename
+                        msg: "Image uploaded with success!"
                     })
                 } catch (error) {
                     return res.status(400).json({
                         error: true,
-                        msg: "Upload error!",
-                        image: req.file.filename
+                        msg: "Upload error!"
                     })
                 }
             }

@@ -15,6 +15,6 @@ router
     .delete(AcomodationController.delete)
 router
     .route("/image/:title")
-    .put(upload.single('image'), AcomodationController.setImages)
+    .put(upload.single('acomodationImage'), AcomodationController.setImages)
     
 module.exports = router
