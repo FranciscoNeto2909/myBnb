@@ -51,19 +51,21 @@ module.exports = {
             if (!acomodation) {
                 return res.status(400).json("Erro: Acomodation not found!")
             }
-            else if (req.file) {
+            else {
                 try {
                     acomodation.image = await req.file.filename
                     await acomodation.save()
 
                     return res.status(200).json({
                         error: false,
-                        msg: "Image uploaded with success!"
+                        msg: "Image uploaded with success!",
+                        title: req.file.filename
                     })
                 } catch (error) {
                     return res.status(400).json({
                         error: true,
-                        msg: "Upload error!"
+                        msg: "Upload error!",
+                        title:req.file.filename
                     })
                 }
             }
