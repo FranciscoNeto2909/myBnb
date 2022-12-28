@@ -46,26 +46,36 @@ module.exports = {
     async setImages(req, res) {
         try {
             const title = req.params.title
+
             const acomodation = await Acomodation.findOne({ where: { title } })
 
             if (!acomodation) {
                 return res.status(400).json("Erro: Acomodation not found!")
             }
-            else {
+            if (acomodation.image != "" | acomodation.image != null) {
                 try {
-                    acomodation.image = await req.file.filename
+                    fs.unlink(`./src/images/acomodations/${acomodation.image}`, (error) => {
+                        if (error) {
+                            console.log("Error:" + error.message)
+                        }
+                    })
+                } catch (error) {
+                    console.log("Error:" + error.message)
+                }
+            }
+            if (req.file) {
+                try {
+                    acomodation.image = req.file.filename
                     await acomodation.save()
 
                     return res.status(200).json({
                         error: false,
-                        msg: "Image uploaded with success!",
-                        title: req.file.filename
+                        msg: "Uploaded with success!"
                     })
                 } catch (error) {
                     return res.status(400).json({
                         error: true,
-                        msg: "Upload error!",
-                        title:req.file.filename
+                        msg: "Upload error!"
                     })
                 }
             }
