@@ -1,5 +1,5 @@
-const fs = require("fs")
 const Acomodation = require("../models/acomodation")
+const fs = require("fs")
 
 module.exports = {
     async all(req, res) {
@@ -45,14 +45,13 @@ module.exports = {
 
     async setImages(req, res) {
         try {
-            const title = req.params.acomodationName
-
+            const title = req.params.title
             const acomodation = await Acomodation.findOne({ where: { title } })
 
             if (!acomodation) {
                 return res.status(400).json("Erro: Acomodation not found!")
             }
-            if (acomodation.image != "" | acomodation.image != null) {
+            if (typeof acomodation.image == 'string' && acomodation.image.length < 5) {
                 try {
                     fs.unlink(`./src/images/acomodations/${acomodation.image}`, (error) => {
                         if (error) {
@@ -63,14 +62,14 @@ module.exports = {
                     console.log("Error:" + error.message)
                 }
             }
-            if (req.file) {
+            else if (req.file) {
                 try {
-                    acomodation.image = req.file.filename
+                    acomodation.image = await req.file.filename
                     await acomodation.save()
 
                     return res.status(200).json({
                         error: false,
-                        msg: "Uploaded with success!"
+                        msg: "Image uploaded with success!"
                     })
                 } catch (error) {
                     return res.status(400).json({
