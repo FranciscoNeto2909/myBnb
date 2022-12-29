@@ -13,6 +13,6 @@ router
     .get(AcomodationController.one)
     .put(AcomodationController.update)
     .delete(AcomodationController.delete)
-    .post(upload.single('acomodationImage'), AcomodationController.setImages)
+    .post(upload.array('acomodationImage'), AcomodationController.setImages)
     
 module.exports = router

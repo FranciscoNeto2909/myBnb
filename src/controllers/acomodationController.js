@@ -49,6 +49,9 @@ module.exports = {
     async setImages(req, res) {
         try {
             const id = req.params.id
+            const images = req.files
+
+            let imagesTitles = []
 
             const acomodation = await Acomodation.findOne({ where: { id } })
 
@@ -66,19 +69,23 @@ module.exports = {
                     console.log("Error:" + error.message)
                 }
             }
-            if (req.file) {
+            if (req.files) {
                 try {
-                    acomodation.image = req.file.filename
+                    await images.map(img => {
+                        imagesTitles.push(img.filename)
+                    })
+
+                    acomodation.images = imagesTitles.toString()
                     await acomodation.save()
 
                     return res.status(200).json({
                         error: false,
-                        msg: "Uploaded with success!"
+                        msg: "Images uploaded with success!"
                     })
                 } catch (error) {
                     return res.status(400).json({
                         error: true,
-                        msg: "Upload error!"
+                        msg: "Images upload error!"
                     })
                 }
             }
