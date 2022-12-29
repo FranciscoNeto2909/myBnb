@@ -26,16 +26,19 @@ module.exports = {
     async create(req, res) {
         try {
             const data = req.body
-            const { hostLocalization } = data
-            const acomodation = await Acomodation.findOne({ where: { hostLocalization } })
+            const { hostLocalization, title } = data
+            const acomodation = await Acomodation.findOne({ where: { hostLocalization, title } })
 
             if (acomodation) {
                 return res.status(400).json("Erro: acomodations alredy exist!")
             } else {
                 await Acomodation.create(data)
+                const newAcomodation = await Acomodation.findOne({ where: { hostLocalization, title } })
+
                 res.status(201).json({
                     erro: false,
-                    msg: "Acomodation registered successfully!"
+                    msg: "Acomodation registered successfully!",
+                    id:newAcomodation.id
                 })
             }
         } catch (error) {
@@ -45,14 +48,14 @@ module.exports = {
 
     async setImages(req, res) {
         try {
-            const title = req.params.title
+            const id = req.params.id
 
-            const acomodation = await Acomodation.findOne({ where: { title } })
+            const acomodation = await Acomodation.findOne({ where: { id } })
 
             if (!acomodation) {
                 return res.status(400).json("Erro: Acomodation not found!")
             }
-            if (acomodation.image != "" | acomodation.image != null) {
+            if (acomodation.image != "") {
                 try {
                     fs.unlink(`./src/images/acomodations/${acomodation.image}`, (error) => {
                         if (error) {
