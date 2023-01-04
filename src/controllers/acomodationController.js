@@ -38,7 +38,7 @@ module.exports = {
                 res.status(201).json({
                     erro: false,
                     msg: "Acomodation registered successfully!",
-                    id:newAcomodation.id
+                    id: newAcomodation.id
                 })
             }
         } catch (error) {
@@ -58,18 +58,33 @@ module.exports = {
             if (!acomodation) {
                 return res.status(400).json("Erro: Acomodation not found!")
             }
-            if (acomodation.image != "") {
+            if (acomodation.images != null && acomodation.images.length > 5) {
                 try {
-                    fs.unlink(`./src/images/acomodations/${acomodation.image}`, (error) => {
+                    const index = acomodation.images.indexOf(req.body.oldImage)
+                    const imgsArr = acomodation.images.split(",")
+                    const newImg = req.files[0].filename
+                    imgsArr.splice(index, 1, newImg)
+
+                    fs.unlink(`./src/images/acomodations/${req.body.oldImage}`, (error) => {
                         if (error) {
                             console.log("Error:" + error.message)
                         }
+                    });
+
+                    acomodation.images = imgsArr.toString()
+                    await acomodation.save()
+
+                    return res.status(200).json({
+                        error: false,
+                        msg: "Images uploaded with success!"
                     })
                 } catch (error) {
-                    console.log("Error:" + error.message)
+                    return res.status(400).json({
+                        error: true,
+                        msg: "Images update error!"
+                    })
                 }
-            }
-            if (req.files) {
+            } else if (acomodation.images == null && req.files) {
                 try {
                     await images.map(img => {
                         imagesTitles.push(img.filename)
@@ -142,12 +157,14 @@ module.exports = {
                 return res.status(400).json("Acomodation not found!")
             }
 
-            if (acomodation.image) {
-                fs.unlink(`./src/images/acomodations/${acomodation.image}`, (error) => {
-                    if (error) {
-                        console.log("Error:" + error.message)
-                    }
-                })
+            if (acomodation.images) {
+                acomodation.images.split(",").map( img =>
+                    fs.unlink(`./src/images/acomodations/${img}`, (error) => {
+                        if (error) {
+                            console.log("Error:" + error.message)
+                        }
+                    })
+                )
             }
 
             await acomodation.destroy()
