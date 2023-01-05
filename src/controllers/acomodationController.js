@@ -60,11 +60,11 @@ module.exports = {
             }
             if (acomodation.images != null && acomodation.images.length > 5) {
                 try {
-                    const index = acomodation.images.indexOf(req.body.oldImage)
                     const imgsArr = acomodation.images.split(",")
+                    const index = imgsArr.indexOf(req.body.oldImage)
                     const newImg = req.files[0].filename
                     imgsArr.splice(index, 1, newImg)
-
+                    console.log(index)
                     fs.unlink(`./src/images/acomodations/${req.body.oldImage}`, (error) => {
                         if (error) {
                             console.log("Error:" + error.message)
