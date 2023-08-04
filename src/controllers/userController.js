@@ -109,7 +109,7 @@ module.exports = {
             if (!user) {
                 return res.status(400).json("Erro: user not found!")
             }
-            if (user.image != "") {
+            if (user.image != "" && user.image != null) {
                 try {
                     fs.unlink(`./src/images/profile/${user.image}`, (error) => {
                         if (error) {
@@ -161,7 +161,7 @@ module.exports = {
         } else {
 
             const token = jwt.sign({ id: user.id }, "a92nfj40d92ny645lf2s03md9n2g", {
-                expiresIn: '7d'
+                expiresIn: '1d'
             })
 
             return res.status(200).json({
